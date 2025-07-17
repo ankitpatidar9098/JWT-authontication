@@ -1,4 +1,6 @@
 class AuthController < ApplicationController
+    skip_before_action :verify_authenticity_token
+
   def login
     user = User.find_by(email: params[:email])
     if user&.authenticate(params[:password])
@@ -12,6 +14,6 @@ class AuthController < ApplicationController
   private
 
   def encode_token(payload)
-    JWT.encode(payload, Rails.application.secrets.secret_key_base)
+    JWT.encode(payload, Rails.application.secret_key_base)
   end
 end
